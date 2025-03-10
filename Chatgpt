@@ -1,0 +1,112 @@
+Itt van egy alap C# példa, amely az OpenAI API segítségével elküldi a felhasználó üzenetét és visszakap egy választ.
+
+Ehhez először regisztrálnod kell az OpenAI-nál, és kell egy API-kulcs.
+
+1️⃣ Telepítsd az OpenAI API kliensét
+C#-ban a legegyszerűbb, ha HttpClient-et használsz, de van egy OpenAI.Net nevű NuGet csomag is, ami megkönnyíti a dolgot.
+Telepítsd NuGet-ből:
+
+bash
+Másolás
+Szerkesztés
+dotnet add package OpenAI
+Vagy a Visual Studio Package Manager Console-ban:
+
+powershell
+Másolás
+Szerkesztés
+Install-Package OpenAI
+2️⃣ Készíts egy egyszerű OpenAI API kliens osztályt
+Ez az osztály fogja kezelni a kommunikációt az OpenAI szerverével.
+
+🔹 OpenAIClient.cs
+csharp
+Másolás
+Szerkesztés
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+public class OpenAIClient
+{
+    private readonly string apiKey;
+    private readonly HttpClient httpClient;
+
+    public OpenAIClient(string apiKey)
+    {
+        this.apiKey = apiKey;
+        httpClient = new HttpClient();
+    }
+
+    public async Task<string> GetChatResponse(string userMessage)
+    {
+        var requestBody = new
+        {
+            model = "gpt-4",
+            messages = new[]
+            {
+                new { role = "system", content = "Te egy segítőkész AI vagy egy oktatási játékban." },
+                new { role = "user", content = userMessage }
+            },
+            max_tokens = 100
+        };
+
+        var requestJson = JsonSerializer.Serialize(requestBody);
+        var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+
+        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+
+        var response = await httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
+        var responseJson = await response.Content.ReadAsStringAsync();
+
+        using var doc = JsonDocument.Parse(responseJson);
+        return doc.RootElement.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString();
+    }
+}
+3️⃣ Használat a fő programban
+Most már használhatod az OpenAIClient osztályt a fő programodban.
+
+🔹 Program.cs
+csharp
+Másolás
+Szerkesztés
+using System;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        string apiKey = "IDE_ÍRD_BE_AZ_OPENAI_API_KULCSODAT"; // 🚨 FONTOS: API kulcsodat itt add meg!
+        var chatBot = new OpenAIClient(apiKey);
+
+        Console.WriteLine("Kérdezz valamit a mesterséges intelligenciától!");
+        
+        while (true)
+        {
+            Console.Write("Te: ");
+            string userMessage = Console.ReadLine();
+
+            if (userMessage.ToLower() == "exit")
+                break;
+
+            string response = await chatBot.GetChatResponse(userMessage);
+            Console.WriteLine($"AI: {response}");
+        }
+    }
+}
+4️⃣ Futás
+Fordítsd és futtasd a programot:
+bash
+Másolás
+Szerkesztés
+dotnet run
+Írj be egy kérdést, és az AI válaszolni fog.
+Ha "exit"-et írsz, kilép a program.
+Továbbfejlesztési lehetőségek
+Ha ezt egy Unity játékba akarod beépíteni, akkor a HttpClient-et aszinkron módon kell meghívnod egy Coroutine vagy egy async Task segítségével.
+A válaszokat egy NPC szövegbuborékában is megjelenítheted.
+Ha offline kellene, egy saját szabályalapú chatbotot építhetsz előre megírt válaszokkal.
+Ha kérdésed van vagy finomítani szeretnéd, szólj! 🚀
