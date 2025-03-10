@@ -1,112 +1,86 @@
-Itt van egy alap C# példa, amely az OpenAI API segítségével elküldi a felhasználó üzenetét és visszakap egy választ.
+Igen, Godot 4-ben is be lehet építeni a ChatGPT-t egy egyszerű HTTP API hívással a GDScript nyelven! 🎮
 
-Ehhez először regisztrálnod kell az OpenAI-nál, és kell egy API-kulcs.
+Mivel Godot-nak van beépített HTTPRequest osztálya, ezért nem kell külső könyvtárat telepíteni, csak a OpenAI API kulcs kell hozzá.
 
-1️⃣ Telepítsd az OpenAI API kliensét
-C#-ban a legegyszerűbb, ha HttpClient-et használsz, de van egy OpenAI.Net nevű NuGet csomag is, ami megkönnyíti a dolgot.
-Telepítsd NuGet-ből:
+📌 1️⃣ OpenAI API kulcs beszerzése
+Regisztrálj az OpenAI weboldalán:
+🔗 https://platform.openai.com/signup
+Menj a "API Keys" szekcióba.
+Hozz létre egy új API kulcsot és másold ki.
+Ne oszd meg senkivel, mert bizalmas adat!
+📌 2️⃣ GDScript kód az OpenAI API-hoz
+Hozz létre egy új GDScript fájlt (pl. ChatGPT.gd), és illeszd be ezt a kódot:
 
-bash
+gdscript
 Másolás
 Szerkesztés
-dotnet add package OpenAI
-Vagy a Visual Studio Package Manager Console-ban:
+extends Node
 
-powershell
-Másolás
-Szerkesztés
-Install-Package OpenAI
-2️⃣ Készíts egy egyszerű OpenAI API kliens osztályt
-Ez az osztály fogja kezelni a kommunikációt az OpenAI szerverével.
+const API_URL = "https://api.openai.com/v1/chat/completions"
+const API_KEY = "IDE_ÍRD_BE_AZ_API_KULCSOD" # 🚨 NE OSZD MEG MÁSOKKAL!
 
-🔹 OpenAIClient.cs
-csharp
-Másolás
-Szerkesztés
-using System;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+@onready var http_request = $HTTPRequest # Győződj meg róla, hogy van HTTPRequest node a jelenetben!
 
-public class OpenAIClient
-{
-    private readonly string apiKey;
-    private readonly HttpClient httpClient;
+func ask_chatgpt(prompt: String):
+    var headers = [
+        "Content-Type: application/json",
+        "Authorization: Bearer " + API_KEY
+    ]
 
-    public OpenAIClient(string apiKey)
-    {
-        this.apiKey = apiKey;
-        httpClient = new HttpClient();
+    var body = {
+        "model": "gpt-4",
+        "messages": [
+            {"role": "system", "content": "Te egy segítőkész AI vagy egy oktatási játékban."},
+            {"role": "user", "content": prompt}
+        ],
+        "max_tokens": 100
     }
 
-    public async Task<string> GetChatResponse(string userMessage)
-    {
-        var requestBody = new
-        {
-            model = "gpt-4",
-            messages = new[]
-            {
-                new { role = "system", content = "Te egy segítőkész AI vagy egy oktatási játékban." },
-                new { role = "user", content = userMessage }
-            },
-            max_tokens = 100
-        };
+    var json_body = JSON.stringify(body)
 
-        var requestJson = JsonSerializer.Serialize(requestBody);
-        var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+    var error = http_request.request(API_URL, headers, HTTPClient.METHOD_POST, json_body)
+    if error != OK:
+        print("Hiba történt az API kérés során: ", error)
 
-        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-
-        var response = await httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
-        var responseJson = await response.Content.ReadAsStringAsync();
-
-        using var doc = JsonDocument.Parse(responseJson);
-        return doc.RootElement.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString();
-    }
-}
-3️⃣ Használat a fő programban
-Most már használhatod az OpenAIClient osztályt a fő programodban.
-
-🔹 Program.cs
-csharp
+# Ez az esemény fut le, amikor válasz érkezik az API-tól
+func _on_HTTPRequest_request_completed(_result, _response_code, _headers, body):
+    var response = JSON.parse_string(body.get_string_from_utf8())
+    if response and "choices" in response:
+        var reply = response["choices"][0]["message"]["content"]
+        print("ChatGPT válasza: ", reply)
+📌 3️⃣ Hogyan használd a kódot?
+Nyiss meg egy Godot jelenetet (.tscn).
+Adj hozzá egy HTTPRequest node-ot a jelenethez! (Ez kell az API híváshoz!)
+Kösd össze a HTTPRequest "request_completed" jelzését a scripttel:
+A ChatGPT.gd fájlban írd be az _on_HTTPRequest_request_completed függvényt.
+Hívd meg az AI-t egy gombnyomásra vagy eseményre:
+gdscript
 Másolás
 Szerkesztés
-using System;
-using System.Threading.Tasks;
+ask_chatgpt("Mi a fővárosa Franciaországnak?")
+📌 4️⃣ Hogyan integráld egy játékba?
+🔹 NPC párbeszédpanel
 
-class Program
-{
-    static async Task Main()
-    {
-        string apiKey = "IDE_ÍRD_BE_AZ_OPENAI_API_KULCSODAT"; // 🚨 FONTOS: API kulcsodat itt add meg!
-        var chatBot = new OpenAIClient(apiKey);
-
-        Console.WriteLine("Kérdezz valamit a mesterséges intelligenciától!");
-        
-        while (true)
-        {
-            Console.Write("Te: ");
-            string userMessage = Console.ReadLine();
-
-            if (userMessage.ToLower() == "exit")
-                break;
-
-            string response = await chatBot.GetChatResponse(userMessage);
-            Console.WriteLine($"AI: {response}");
-        }
-    }
-}
-4️⃣ Futás
-Fordítsd és futtasd a programot:
-bash
+Az AI válasza megjelenhet egy Label vagy RichTextLabel komponensben.
+Példa:
+gdscript
 Másolás
 Szerkesztés
-dotnet run
-Írj be egy kérdést, és az AI válaszolni fog.
-Ha "exit"-et írsz, kilép a program.
-Továbbfejlesztési lehetőségek
-Ha ezt egy Unity játékba akarod beépíteni, akkor a HttpClient-et aszinkron módon kell meghívnod egy Coroutine vagy egy async Task segítségével.
-A válaszokat egy NPC szövegbuborékában is megjelenítheted.
-Ha offline kellene, egy saját szabályalapú chatbotot építhetsz előre megírt válaszokkal.
-Ha kérdésed van vagy finomítani szeretnéd, szólj! 🚀
+$RichTextLabel.text = reply
+🔹 Kvíz vagy interaktív oktatás
+
+Az AI visszaküldheti a helyes választ, és a játékos válaszát ellenőrizheted. 🔹 Chatbot a játékban
+A játékos beír egy kérdést, és az AI válaszol neki valós időben.
+📌 5️⃣ Fontos dolgok!
+✅ Internetkapcsolat kell az API használatához!
+✅ Az OpenAI API fizetős lehet bizonyos mennyiség felett!
+✅ Ha nincs internet, kezelni kell a hibát (pl. előre mentett válaszok).
+
+🚀 Most már a Godot játékotok is tud kommunikálni a ChatGPT-vel! Ha kell még segítség, szólj! 🎮
+
+
+
+
+
+
+
