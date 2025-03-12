@@ -1,1 +1,114 @@
-GDD : Egy tanító jellegű játék amivel az angol nyelv tanulását segítjük elő.
+# AI Angol Nyelvtanító Játék - Dokumentáció
+
+## 📌 1. Design Dokumentáció
+
+### 🎮 Game Design Document (GDD)
+Az **AI Angol Nyelvtanító Játék** egy oktatójáték, amelyben a játékosoknak az AI által generált angol nyelvű kérdésekre kell helyesen válaszolniuk. A játék fejlesztése **Godot Engine**-ben történik, és célja az angol nyelvtudás fejlesztése.
+
+#### 🔹 Játékmenet
+- Az **AI véletlenszerű angol nyelvű kérdéseket** tesz fel.
+- A **helyes válasz** után lehet továbblépni a következő kérdésre.
+- **Hibás válasz esetén** az AI rávezet a helyes megoldásra.
+
+#### 🎯 Cél
+- Segíteni az **angol nyelv tanulásában**.
+- Interaktív módon gyakoroltatni a nyelvet **AI segítségével**.
+
+---
+
+### 📖 Story & Narrative Document
+- A játékos egy **nyelvtanuló**, aki az AI által generált kérdéseken keresztül fejleszti angol nyelvtudását.
+- A játék egy **virtuális tanulási környezetet** biztosít.
+- A helyes válaszokkal **folyamatosan előre lehet haladni** a tanulásban.
+
+---
+
+### 🎨 UI/UX Design Guide
+- **Egyszerű, letisztult felhasználói felület**.
+- **Drótvázak és interaktív menürendszer**.
+- Az AI által feltett kérdések és a válaszadási lehetőségek **könnyen elérhetők**.
+
+---
+
+### 🏗️ Level Design Document
+- A játékban **különböző témakörökből generált angol nyelvű kérdések** szerepelnek.
+- Az AI **dinamikusan állítja össze** a tanulási útvonalat.
+
+## 🔧 2. Technikai Dokumentáció
+
+### 🏛️ Code Architecture Overview
+- **Fő modulok:**
+  - `GameManager`: A játék logikájának vezérlése.
+  - `UIManager`: Felhasználói felületek kezelése.
+  - `QuestionManager`: AI által generált kérdések kezelése.
+
+---
+
+### 🔗 API Documentation
+- **OpenAI API** használata az angol nyelvű kérdések generálására és válaszok értékelésére.
+
+---
+
+### 🔄 Game Loop Explanation
+- A fő játék ciklus **Godot engine-ben**:
+  ```gdscript
+  func _process(delta):
+      pass
+  ```
+- **Eseményvezérelt interakciók**.
+
+---
+
+### 🧠 AI & NPC Behavior
+- **AI véletlenszerűen generál kérdéseket** és értékeli a válaszokat.
+- Hibás válasz esetén az AI **segít a helyes megoldás megtalálásában**.
+
+## 🚀 3. Fejlesztési & Verziókezelési Dokumentáció
+
+### 💾 Installation & Setup Guide
+- **Godot Engine letöltése** és telepítése.
+- **Repository klónozása** GitHub-ról:
+  ```sh
+  git clone https://github.com/felhasznalo/AI-English-Learning-Game.git
+  ```
+
+---
+
+### 🔄 Development Workflow
+- **Branch kezelés:** `main`, `dev`, `feature/*`.
+- **Pull Request szabályok:**
+  - Minden PR-hoz **két fejlesztő által végzett ellenőrzés** szükséges.
+
+---
+
+### 🐞 Bug Reporting Guide
+- **GitHub Issues** használata.
+- **Hiba reprodukálási lépések** részletezése.
+
+---
+
+### 📦 Deployment Guide
+- **Játék exportálása** Windows/Linux/macOS platformokra.
+- **Telepítő csomag generálása** Godot segítségével.
+
+## 🛠️ 4. Tesztelési Dokumentáció
+
+### ✅ Test Plan
+- **Manuális tesztelés** minden fő funkcióra.
+- **Automatikus tesztkészlet** CI/CD integrációhoz.
+
+---
+
+### 🐛 Bug Tracker
+- **GitHub Issues**, prioritás és állapot szerint kezelve.
+
+---
+
+### ⚡ Performance Optimization Guide
+- **Memória optimalizálás:** unnecessary objektumok felszabadítása.
+- **Rendering optimalizálás:** sprite-k és animációk hatékony kezelése.
+
+---
+
+Ez a dokumentáció segíti az **AI Angol Nyelvtanító Játék** fejlesztését és skálázható fenntartását. 🎯
+
