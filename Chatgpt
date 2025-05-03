@@ -12,8 +12,7 @@ Ne oszd meg senkivel, mert bizalmas adat!
 Hozz létre egy új GDScript fájlt (pl. ChatGPT.gd), és illeszd be ezt a kódot:
 
 gdscript
-Másolás
-Szerkesztés
+
 extends Node
 
 const API_URL = "https://api.openai.com/v1/chat/completions"
