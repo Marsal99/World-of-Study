@@ -12,6 +12,7 @@
     ✨ Teljesen testreszabható és bővíthető
 
 💡 Fő funkciók
+
     Kérdés-válasz alapú harcrendszer (helyes válasz = sebzés)
 
     ChatGPT-vel való beszélgetés NPC-n keresztül
@@ -23,6 +24,7 @@
     Godot UI + logikai kód teljes integrációban
 
 📦 Követelmények
+
     Godot 4.1+
 
     OpenAI API kulcs (vagy mock üzemmód)
