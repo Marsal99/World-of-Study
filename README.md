@@ -1,29 +1,30 @@
-🎮 World of Study – ChatGPT-integrált oktatójáték Godot-ban
-World of Study egy 2D-s oktatási kalandjáték, amelyet a Godot Engine 4-ban készítettünk, és különlegessége, hogy valós időben képes kapcsolódni a ChatGPT-hez.
-A projekt célja, hogy demonstrálja, hogyan lehet mesterséges intelligenciát beépíteni játékos tanulási élménybe, például:
+🎮 World of Study – ChatGPT-integrált oktatójáték Godot-ban:
 
-🧠 Harc helyett kérdésekre kell válaszolni
+    World of Study egy 2D-s oktatási kalandjáték, amelyet a Godot Engine 4-ban készítettünk, és különlegessége, hogy valós időben képes kapcsolódni a ChatGPT-hez.
+    A projekt célja, hogy demonstrálja, hogyan lehet mesterséges intelligenciát beépíteni játékos tanulási élménybe, például:
 
-🤖 NPC-k valódi AI-válaszokat adnak
+    🧠 Harc helyett kérdésekre kell válaszolni
 
-🎯 Interaktív párbeszédek tanulásra és gyakorlásra
+    🤖 NPC-k valódi AI-válaszokat adnak
 
-✨ Teljesen testreszabható és bővíthető
+    🎯 Interaktív párbeszédek tanulásra és gyakorlásra
+
+    ✨ Teljesen testreszabható és bővíthető
 
 💡 Fő funkciók
-Kérdés-válasz alapú harcrendszer (helyes válasz = sebzés)
+    Kérdés-válasz alapú harcrendszer (helyes válasz = sebzés)
 
-ChatGPT-vel való beszélgetés NPC-n keresztül
+    ChatGPT-vel való beszélgetés NPC-n keresztül
 
-Játékos mozgás letiltása/panel megjelenítés
+    Játékos mozgás letiltása/panel megjelenítés
 
-HTTP-kapcsolat az OpenAI API felé
+    HTTP-kapcsolat az OpenAI API felé
 
-Godot UI + logikai kód teljes integrációban
+    Godot UI + logikai kód teljes integrációban
 
 📦 Követelmények
-Godot 4.1+
+    Godot 4.1+
 
-OpenAI API kulcs (vagy mock üzemmód)
+    OpenAI API kulcs (vagy mock üzemmód)
 
-Internetkapcsolat (ha az AI-t is használod)
+    Internetkapcsolat (ha az AI-t is használod)
